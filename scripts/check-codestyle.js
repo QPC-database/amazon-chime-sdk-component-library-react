@@ -11,13 +11,13 @@ const { logger, process } = require('./utilities');
 const exec = require('child_process').execSync;
 let exitCode = 0;
 
-let walk = function(dir) {
+let walk = function (dir) {
   let results = [];
   if (dir.includes('.DS_Store')) {
     return results;
   }
   let list = fs.readdirSync(dir);
-  list.forEach(function(file) {
+  list.forEach(function (file) {
     file = dir + '/' + file;
     let stat = fs.statSync(file);
     if (stat && stat.isDirectory()) {
@@ -29,7 +29,7 @@ let walk = function(dir) {
   return results;
 };
 
-let failed = function(file, reason, description) {
+let failed = function (file, reason, description) {
   logger.error(file, reason);
   if (description) {
     logger.warn(description);
@@ -37,25 +37,20 @@ let failed = function(file, reason, description) {
   exitCode = 1;
 };
 
-let tests = function() {
+let tests = function () {
   return walk('tst')
-    .filter(file => file.endsWith('.test.ts') || file.endsWith('test.tsx'))
+    .filter((file) => file.endsWith('.test.ts') || file.endsWith('test.tsx'))
     .sort();
 };
 
-let allFiles = function() {
+let allFiles = function () {
   const srcFiles = walk('src').filter(
-    file => file.endsWith('.ts') || file.endsWith('.tsx')
+    (file) => file.endsWith('.ts') || file.endsWith('.tsx')
   );
-
-  const demosMeetingFiles = walk('demo/meeting/src').filter(
-    file =>
-      file.endsWith('.ts') || file.endsWith('.tsx') || file.endsWith('.js')
-  );
-  return srcFiles.concat(tests()).concat(demosMeetingFiles);
+  return srcFiles.concat(tests());
 };
 
-let joinYears = function(years) {
+let joinYears = function (years) {
   let prevYear = null;
   let rangeEnd = null;
   let out = '';
@@ -81,11 +76,11 @@ let joinYears = function(years) {
   return out;
 };
 
-let unique = function(value, index, self) {
+let unique = function (value, index, self) {
   return self.indexOf(value) === index;
 };
 
-tests().forEach(file => {
+tests().forEach((file) => {
   if (
     file.includes(`.DS_Store`) ||
     file.includes(`snapshots`) ||
@@ -119,7 +114,7 @@ const spdx = '// SPDX-License-Identifier: Apache-2.0';
 
 let allYears = [];
 
-allFiles().forEach(file => {
+allFiles().forEach((file) => {
   if (file.endsWith('.d.ts') || file.includes('.DS_Store')) {
     return;
   }
@@ -127,10 +122,7 @@ allFiles().forEach(file => {
   const stdout = exec(`git log --pretty=format:'%ad' --date=short ${file}`);
 
   const dates = [];
-  for (const line of stdout
-    .toString()
-    .trim()
-    .split('\n')) {
+  for (const line of stdout.toString().trim().split('\n')) {
     const year = line.replace(/[-].*/, '').replace(`'`, '');
     dates.push(year);
     allYears.push(year);
@@ -141,10 +133,7 @@ allFiles().forEach(file => {
   const copyright = `// Copyright ${joinYears(
     yearsForFileInGitHistory
   )} Amazon.com, Inc. or its affiliates. All Rights Reserved.`;
-  const fileLines = fs
-    .readFileSync(file)
-    .toString()
-    .split('\n');
+  const fileLines = fs.readFileSync(file).toString().split('\n');
 
   if (fileLines[0].trim() !== copyright) {
     failed(
@@ -172,7 +161,6 @@ allFiles().forEach(file => {
   // Check source files for console.log() and skip check for non-prod code.
   for (let i = 0; i < fileLines.length; i++) {
     if (
-      file.includes('demo/') ||
       file.includes('tst/') ||
       file.includes('.stories.') ||
       file.includes('providers/') ||
@@ -195,12 +183,7 @@ const footerCopyright = `\nCopyright ${joinYears(
 )} Amazon.com, Inc. or its affiliates. All Rights Reserved.\n`;
 
 for (const file of ['README.md', 'NOTICE']) {
-  if (
-    !fs
-      .readFileSync(file)
-      .toString()
-      .endsWith(footerCopyright)
-  ) {
+  if (!fs.readFileSync(file).toString().endsWith(footerCopyright)) {
     failed(
       file,
       `Ensure that ${file} ends with the following copyright: ${footerCopyright}`
