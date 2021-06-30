@@ -46,7 +46,7 @@ jobs:
           cd amazon-chime-sdk/apps/meeting
           npm install ../../../amazon-chime-sdk-component-library-react-${{ steps.package-version.outputs.current-version}}.tgz
       - name: Update js sdk version
-        uses: ./.github/actions/update-js-sdk-action
+        run: node ./deploy.js -r us-east-1 -b chime-sdk-components-demo-canary -s chime-sdk-components-demo-canary -l
       - name: Deploy the Serverless Demo App
         run: |
           cd serverless

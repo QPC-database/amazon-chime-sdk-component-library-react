@@ -150,9 +150,17 @@ if (release_option !== '5') {
 
   // Checkout the meeting demo and udpate the demo to the most up to date version of the SDK
   process.chdir(path.join(__dirname, '../..'));
-  spawnOrFail('git', [
-    'clone https://github.com/aws-samples/amazon-chime-sdk.git',
-  ]);
+  if (!fs.existsSync('amazon-chime-sdk')) {
+    spawnOrFail('git', [
+      'clone https://github.com/aws-samples/amazon-chime-sdk.git',
+    ]);
+  } else {
+    spawnOrFail('rm', ['-rf amazon-chime-sdk']);
+    spawnOrFail('git', [
+      'clone https://github.com/aws-samples/amazon-chime-sdk.git',
+    ]);
+  }
+
   process.chdir(path.join(__dirname, '../../amazon-chime-sdk/apps/meeting'));
   spawnOrFail('npm', [`install amazon-chime-sdk-js@${updatedSdkVersion}`]);
 
@@ -206,6 +214,9 @@ if (release_option === '5') {
 } else {
   spawnOrFail('git', ['push origin HEAD:release -f']);
 }
+
+process.chdir(path.join(__dirname, '../../amazon-chime-sdk/apps/meeting'));
+spawnOrFail('npm', [`install`]);
 process.chdir(
   path.join(__dirname, '../../amazon-chime-sdk/apps/meeting/serverless')
 );
