@@ -181,33 +181,33 @@ logger.warn(`
 shouldContinuePrompt();
 
 // Creates a new React test app, install component and sdk and build the test app to ensure no peer dependency warnings, errors or build issues
-logger.log(
-  'Create a new npm package and install amazon-chime-sdk-component-library-react and amazon-chime-sdk-js sdk as dependencies, check if there is peer dependency warning for amazon-chime-sdk-component-library-react'
-);
-process.chdir(path.join(__dirname, '..'));
-spawnOrFail('yalc', ['publish']);
-process.chdir(path.join(__dirname, '..'));
-if (!fs.existsSync('dependency-check-app')) {
-  spawnOrFail('mkdir', ['dependency-check-app']);
-} else {
-  spawnOrFail('rm', ['-rf dependency-check-app']);
-  spawnOrFail('mkdir', ['dependency-check-app']);
-}
-process.chdir(path.join(__dirname, '../dependency-check-app'));
-spawnOrFail('npm', ['init -y']);
-spawnOrFail('npm', ['install react react-dom']);
-spawnOrFail('npm', [
-  `install amazon-chime-sdk-js@${updatedSdkVersion} styled-components styled-system`,
-]);
-spawnOrFail('yalc', ['add amazon-chime-sdk-component-library-react']);
-checkWarning(
-  'npm',
-  ['install -q'],
-  null,
-  'amazon-chime-sdk-component-library-react'
-);
-process.chdir(path.join(__dirname, '..'));
-spawnOrFail('rm', ['-rf dependency-check-app']);
+// logger.log(
+//   'Create a new npm package and install amazon-chime-sdk-component-library-react and amazon-chime-sdk-js sdk as dependencies, check if there is peer dependency warning for amazon-chime-sdk-component-library-react'
+// );
+// process.chdir(path.join(__dirname, '..'));
+// spawnOrFail('yalc', ['publish']);
+// process.chdir(path.join(__dirname, '..'));
+// if (!fs.existsSync('dependency-check-app')) {
+//   spawnOrFail('mkdir', ['dependency-check-app']);
+// } else {
+//   spawnOrFail('rm', ['-rf dependency-check-app']);
+//   spawnOrFail('mkdir', ['dependency-check-app']);
+// }
+// process.chdir(path.join(__dirname, '../dependency-check-app'));
+// spawnOrFail('npm', ['init -y']);
+// spawnOrFail('npm', ['install react react-dom']);
+// spawnOrFail('npm', [
+//   `install amazon-chime-sdk-js@${updatedSdkVersion} styled-components styled-system`,
+// ]);
+// spawnOrFail('yalc', ['add amazon-chime-sdk-component-library-react']);
+// checkWarning(
+//   'npm',
+//   ['install -q'],
+//   null,
+//   'amazon-chime-sdk-component-library-react'
+// );
+// process.chdir(path.join(__dirname, '..'));
+// spawnOrFail('rm', ['-rf dependency-check-app']);
 
 if (release_option === '5') {
   spawnOrFail('git', ['push origin HEAD:hotfix -f']);
@@ -215,8 +215,14 @@ if (release_option === '5') {
   spawnOrFail('git', ['push origin HEAD:release -f']);
 }
 
+// Pack the latest version of React library and install it in meeting demo
+process.chdir(path.join(__dirname, '..'));
+spawnOrFail('npm', ['run build']);
+spawnOrFail('npm', ['pack']);
 process.chdir(path.join(__dirname, '../../amazon-chime-sdk/apps/meeting'));
-spawnOrFail('npm', [`install`]);
+spawnOrFail('npm', [
+  `install ../../../amazon-chime-sdk-component-library-react/amazon-chime-sdk-component-library-react-${versionString}.tgz`,
+]);
 process.chdir(
   path.join(__dirname, '../../amazon-chime-sdk/apps/meeting/serverless')
 );
