@@ -7,6 +7,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+### Added
+- Add support to disable or override event reporter for client event ingestion once enabled in the dependent Amazon Chime SDK for JavaScript. For more information check the [Client Event Ingestion guide](https://aws.github.io/amazon-chime-sdk-js/modules/clientevent_ingestion.htmlhttps://aws.github.io/amazon-chime-sdk-js/modules/clientevent_ingestion.html) in the Amazon Chime SDK for JavaScript.
+
+### Changed
+
+### Removed
+
+
 ## [2.6.0] - 2021-06-16
 
 ### Fixed
