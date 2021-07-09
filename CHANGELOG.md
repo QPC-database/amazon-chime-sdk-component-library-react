@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add new function `setIsVideoEnabled` in `useLocalVideo` hook.
+- [Doc] Add how-to doc for view-only mode in storybook.
 
 ### Changed
 
