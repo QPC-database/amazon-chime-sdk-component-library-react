@@ -6,9 +6,8 @@ import { PreviewVideo } from './';
 # PreviewVideo
 
 The `PreviewVideo` component renders a preview of the local user's video. If there is no available video input, the video will be blank. 
-When the `PreviewVideo` component is unmounted, it will release the media streams associated with the video element it references.
 
-A `PreviewVideo` is typically used on a pre-meeting view, or a device settings page.
+A `PreviewVideo` is typically used on a pre-meeting view, or a device settings page. The React SDK depends on the Amazon Chime SDK for JavaScript, a single video stream is attached to a video element at a time. Hence, if enabled preview video in the in-meeting screen page, closing preview video also leads to the clos of local video. We recommed using `PreviewVideo` component prior to in-meeting page.
 
 ## Importing
 
